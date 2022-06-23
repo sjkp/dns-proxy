@@ -32,5 +32,6 @@ module aca 'aca.bicep' = {
     location: location
     name: appName
     containerImage: containerImage
+    targetPort: 2020
   }
 }
