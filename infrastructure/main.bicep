@@ -11,14 +11,6 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 
 var storageAccountName = 'st${appName}'
 
-module storage './storage.bicep' = {
-  name: 'storage'
-  params: {
-    storageAccountName: storageAccountName
-    location: location
-  }
-  scope: rg
-}
 
 module logs 'logs.bicep' = {
   scope: rg
@@ -29,21 +21,7 @@ module logs 'logs.bicep' = {
   }
 }
 
-module keyvault 'keyvault.bicep' = {
-  scope: rg
-  name: 'keyvault'  
-  params: {
-    name: 'kv-${appName}'
-    location: location
-    principalIds: []
-    secrets: [
-      {
-        name: 'AzureStorageConnectionString'
-        value: storage.outputs.connectionString
-      }
-    ]
-  }
-}
+
 
 module aca 'aca.bicep' = {
   scope: rg
@@ -54,5 +32,6 @@ module aca 'aca.bicep' = {
     location: location
     name: appName
     containerImage: containerImage
+    targetPort: 2020
   }
 }
